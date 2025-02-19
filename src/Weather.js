@@ -12,14 +12,13 @@ export default function WeatherApp() {
 
   useEffect(() => {
     searchCity(city, unit);
-  }, [unit]);
+  }, [city, unit]);
 
   function handleSearch(event) {
     event.preventDefault();
     const searchInput = event.target.elements.cityInput.value.trim();
     if (!searchInput) return alert("Please enter a city");
     setCity(searchInput);
-    searchCity(searchInput, unit);
   }
 
   function searchCity(city, unit) {
@@ -160,11 +159,7 @@ export default function WeatherApp() {
           open-sourced
           <a href="https://github.com/liflatt/react-weather-app"> on GitHub</a>,
           and
-          <a href="https://react-weather-app-by-lindsey-flatt.netlify.app/">
-            {" "}
-            hosted on Netlify
-          </a>
-          .
+          <a href="https://lf-weather.netlify.app/"> hosted on Netlify</a>.
         </p>
       </footer>
     </div>
