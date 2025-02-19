@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReactAnimatedWeather from "react-animated-weather";
@@ -10,18 +10,15 @@ export default function WeatherApp() {
   const [forecast, setForecast] = useState([]);
   const [ready, setReady] = useState(false);
 
-  useEffect(() => {
-    searchCity(city, unit);
-  }, [city, unit]);
-
   function handleSearch(event) {
     event.preventDefault();
     const searchInput = event.target.elements.cityInput.value.trim();
     if (!searchInput) return alert("Please enter a city");
     setCity(searchInput);
+    fetchWeather(searchInput, unit);
   }
 
-  function searchCity(city, unit) {
+  function fetchWeather(city, unit) {
     const apiKey = "b0452f91cd75631eoba398t0f42a2100";
     const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${unit}`;
     const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=${unit}`;
@@ -42,7 +39,9 @@ export default function WeatherApp() {
   }
 
   function toggleUnit() {
-    setUnit((prevUnit) => (prevUnit === "imperial" ? "metric" : "imperial"));
+    const newUnit = unit === "imperial" ? "metric" : "imperial";
+    setUnit(newUnit);
+    fetchWeather(city, newUnit);
   }
 
   function capitalizeWords(str) {
