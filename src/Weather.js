@@ -7,11 +7,12 @@ export default function WeatherApp() {
   const [city, setCity] = useState("Dallas");
   const [unit, setUnit] = useState("imperial");
   const [weather, setWeather] = useState({});
+  const [forecast, setForecast] = useState([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    searchCity("Dallas");
-  }, []);
+    searchCity("Dallas", unit);
+  }, [unit]);
 
   function capitalizeWords(str) {
     return str
@@ -29,14 +30,15 @@ export default function WeatherApp() {
       return;
     }
     setCity(searchInput);
-    searchCity(searchInput);
+    searchCity(searchInput, unit);
   }
 
-  function searchCity(city) {
+  function searchCity(city, unit) {
     const apiKey = "b0452f91cd75631eoba398t0f42a2100";
-    const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${unit}`;
+    const currentWeatherUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${unit}`;
+    const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=${unit}`;
 
-    axios.get(apiUrl).then((response) => {
+    axios.get(currentWeatherUrl).then((response) => {
       setWeather({
         temperature: Math.round(response.data.temperature.current),
         description: capitalizeWords(response.data.condition.description),
@@ -45,6 +47,10 @@ export default function WeatherApp() {
         icon: mapWeatherIcon(response.data.condition.icon),
       });
       setReady(true);
+    });
+
+    axios.get(forecastUrl).then((response) => {
+      setForecast(response.data.daily.slice(0, 5)); // Get a 5-day forecast
     });
   }
 
@@ -98,36 +104,62 @@ export default function WeatherApp() {
       </header>
 
       {ready && (
-        <div className="row align-items-center">
-          <div className="col-md-6">
-            <h1 className="fw-bold">{city}</h1>
-            <p>
-              <span>{new Date().toLocaleString()}</span>,
-              <span className="text-primary"> {weather.description}</span>
-              <br />
-              Humidity: <strong>{weather.humidity}%</strong>, Wind:{" "}
-              <strong>{weather.wind} mph</strong>
-            </p>
+        <>
+          <div className="row align-items-center">
+            <div className="col-md-6">
+              <h1 className="fw-bold">{city}</h1>
+              <p>
+                <span>{new Date().toLocaleString()}</span>,
+                <span className="text-primary"> {weather.description}</span>
+                <br />
+                Humidity: <strong>{weather.humidity}%</strong>, Wind:{" "}
+                <strong>
+                  {weather.wind} {unit === "imperial" ? "mph" : "km/h"}
+                </strong>
+              </p>
+            </div>
+            <div className="col-md-6 text-center">
+              <ReactAnimatedWeather
+                icon={weather.icon}
+                color="#1e1e1e"
+                size={64}
+                animate={true}
+              />
+              <h2 className="fw-bold display-4">
+                {weather.temperature}°
+                <span>{unit === "imperial" ? "F" : "C"}</span>
+              </h2>
+              <button
+                className="btn btn-link text-decoration-none"
+                onClick={toggleUnit}
+              >
+                Switch to {unit === "imperial" ? "°C" : "°F"}
+              </button>
+            </div>
           </div>
-          <div className="col-md-6 text-center">
-            <ReactAnimatedWeather
-              icon={weather.icon}
-              color="#1e1e1e"
-              size={64}
-              animate={true}
-            />
-            <h2 className="fw-bold display-4">
-              {weather.temperature}°
-              <span>{unit === "imperial" ? "F" : "C"}</span>
-            </h2>
-            <button
-              className="btn btn-link text-decoration-none"
-              onClick={toggleUnit}
-            >
-              Switch to {unit === "imperial" ? "°C" : "°F"}
-            </button>
+
+          <div className="row mt-4 text-center">
+            {forecast.map((day, index) => (
+              <div key={index} className="col">
+                <h5>
+                  {new Date(day.time * 1000).toLocaleDateString("en-US", {
+                    weekday: "short",
+                  })}
+                </h5>
+                <ReactAnimatedWeather
+                  icon={mapWeatherIcon(day.condition.icon)}
+                  color="#1e1e1e"
+                  size={50}
+                  animate={true}
+                />
+                <p>
+                  <strong>{Math.round(day.temperature.maximum)}°</strong> /{" "}
+                  {Math.round(day.temperature.minimum)}°
+                </p>
+              </div>
+            ))}
           </div>
-        </div>
+        </>
       )}
 
       <footer className="border-top pt-3 text-center">
