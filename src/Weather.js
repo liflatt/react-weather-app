@@ -11,51 +11,43 @@ export default function WeatherApp() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    searchCity("Dallas", unit);
+    searchCity(city, unit);
   }, [unit]);
-
-  function capitalizeWords(str) {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  }
 
   function handleSearch(event) {
     event.preventDefault();
     const searchInput = event.target.elements.cityInput.value.trim();
-    if (!searchInput) {
-      alert("Please enter a city");
-      return;
-    }
+    if (!searchInput) return alert("Please enter a city");
     setCity(searchInput);
     searchCity(searchInput, unit);
   }
 
   function searchCity(city, unit) {
     const apiKey = "b0452f91cd75631eoba398t0f42a2100";
-    const currentWeatherUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${unit}`;
+    const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${unit}`;
     const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=${unit}`;
 
-    axios.get(currentWeatherUrl).then((response) => {
-      setWeather({
-        temperature: Math.round(response.data.temperature.current),
-        description: capitalizeWords(response.data.condition.description),
-        humidity: response.data.temperature.humidity,
-        wind: response.data.wind.speed,
-        icon: mapWeatherIcon(response.data.condition.icon),
-      });
-      setReady(true);
-    });
-
-    axios.get(forecastUrl).then((response) => {
-      setForecast(response.data.daily.slice(0, 5)); // Get a 5-day forecast
-    });
+    axios.all([axios.get(apiUrl), axios.get(forecastUrl)]).then(
+      axios.spread((weatherRes, forecastRes) => {
+        setWeather({
+          temperature: Math.round(weatherRes.data.temperature.current),
+          description: capitalizeWords(weatherRes.data.condition.description),
+          humidity: weatherRes.data.temperature.humidity,
+          wind: weatherRes.data.wind.speed,
+          icon: mapWeatherIcon(weatherRes.data.condition.icon),
+        });
+        setForecast(forecastRes.data.daily.slice(0, 5));
+        setReady(true);
+      })
+    );
   }
 
   function toggleUnit() {
-    setUnit(unit === "imperial" ? "metric" : "imperial");
+    setUnit((prevUnit) => (prevUnit === "imperial" ? "metric" : "imperial"));
+  }
+
+  function capitalizeWords(str) {
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
   }
 
   function mapWeatherIcon(apiIcon) {
@@ -168,7 +160,11 @@ export default function WeatherApp() {
           open-sourced
           <a href="https://github.com/liflatt/react-weather-app"> on GitHub</a>,
           and
-          <a href="https://lf-weather.netlify.app/"> hosted on Netlify</a>.
+          <a href="https://react-weather-app-by-lindsey-flatt.netlify.app/">
+            {" "}
+            hosted on Netlify
+          </a>
+          .
         </p>
       </footer>
     </div>
