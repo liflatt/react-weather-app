@@ -11,11 +11,19 @@
   padding: 2rem;
 }
 
+.Weather h1 {
+  font-size: 2rem;
+}
+
+.Weather h2 {
+  font-size: 1.5rem;
+}
 .Weather .weather-info ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: inline-block;
+  font-size: 1rem;
 }
 
 .Weather .weather-info strong {
@@ -24,4 +32,5 @@
 
 .Weather a {
   color: #b92cb5;
+  font-size: 1rem;
 }
