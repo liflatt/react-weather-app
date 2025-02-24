@@ -6,7 +6,6 @@ import Footer from "./Footer";
 import FormattedDate from "./FormattedDate";
 import "./Weather.css";
 
-// Define getIcon outside the component to avoid re-creation on every render.
 const ICONS = {
   "clear-sky-day": "CLEAR_DAY",
   "clear-sky-night": "CLEAR_NIGHT",
@@ -73,7 +72,6 @@ export default function Weather({
       });
   }, []);
 
-  // Run when defaultCity/defaultUnit change.
   useEffect(() => {
     fetchWeather(defaultCity, defaultUnit);
   }, [defaultCity, defaultUnit, fetchWeather]);
@@ -135,7 +133,7 @@ export default function Weather({
                 </ul>
               </div>
 
-              <div className="col-md-6 col-lg-6 col-sm-6">
+              <div className="col-6">
                 <div className="d-flex justify-content-end align-items-start temperature-container">
                   <ReactAnimatedWeather
                     icon={weather.icon}
