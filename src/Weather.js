@@ -1,55 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReactAnimatedWeather from "react-animated-weather";
+import Footer from "./Footer";
 
-export default function WeatherApp() {
-  const [city, setCity] = useState("Dallas");
-  const [unit, setUnit] = useState("imperial");
+export default function Weather({
+  defaultCity = "Dallas",
+  defaultUnit = "imperial",
+}) {
+  const [city, setCity] = useState(defaultCity);
+  const [unit, setUnit] = useState(defaultUnit);
   const [weather, setWeather] = useState({});
   const [forecast, setForecast] = useState([]);
   const [ready, setReady] = useState(false);
+  // eslint-disable-next-line
+  useEffect(() => {
+    fetchWeather(defaultCity, defaultUnit);
+  }, []);
 
-  function handleSearch(event) {
-    event.preventDefault();
-    const searchInput = event.target.elements.cityInput.value.trim();
-    if (!searchInput) return alert("Please enter a city");
-    setCity(searchInput);
-    fetchWeather(searchInput, unit);
-  }
+  // eslint-disable-next-line
 
-  function fetchWeather(city, unit) {
+  const fetchWeather = (cityQuery, unit) => {
     const apiKey = "b0452f91cd75631eoba398t0f42a2100";
-    const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=${unit}`;
-    const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=${unit}`;
+    const currentUrl = `https://api.shecodes.io/weather/v1/current?query=${cityQuery}&key=${apiKey}&units=${unit}`;
+    const forecastUrl = `https://api.shecodes.io/weather/v1/forecast?query=${cityQuery}&key=${apiKey}&units=${unit}`;
 
-    axios.all([axios.get(apiUrl), axios.get(forecastUrl)]).then(
-      axios.spread((weatherRes, forecastRes) => {
-        setWeather({
-          temperature: Math.round(weatherRes.data.temperature.current),
-          description: capitalizeWords(weatherRes.data.condition.description),
-          humidity: weatherRes.data.temperature.humidity,
-          wind: weatherRes.data.wind.speed,
-          icon: mapWeatherIcon(weatherRes.data.condition.icon),
-        });
-        setForecast(forecastRes.data.daily.slice(0, 5));
-        setReady(true);
-      })
-    );
-  }
+    axios
+      .all([axios.get(currentUrl), axios.get(forecastUrl)])
+      .then(
+        axios.spread((current, forecastData) => {
+          setCity(current.data.city);
+          setWeather({
+            temperature: Math.round(current.data.temperature.current),
+            // Inline capitalization of the description
+            description: current.data.condition.description.replace(
+              /\b\w/g,
+              (char) => char.toUpperCase()
+            ),
+            humidity: current.data.temperature.humidity,
+            wind: current.data.wind.speed,
+            icon: getIcon(current.data.condition.icon),
+          });
+          setForecast(forecastData.data.daily.slice(0, 5));
+          setReady(true);
+        })
+      )
+      .catch((error) => {
+        console.error("Error fetching weather:", error);
+        alert("Failed to fetch weather data. Please try again.");
+      });
+  };
 
-  function toggleUnit() {
+  const handleSearch = (event) => {
+    event.preventDefault();
+    const inputCity = event.target.elements.cityInput.value.trim();
+    if (!inputCity) return alert("Please enter a city");
+    fetchWeather(inputCity, unit);
+  };
+
+  const toggleUnit = () => {
     const newUnit = unit === "imperial" ? "metric" : "imperial";
     setUnit(newUnit);
     fetchWeather(city, newUnit);
-  }
+  };
 
-  function capitalizeWords(str) {
-    return str.replace(/\b\w/g, (char) => char.toUpperCase());
-  }
-
-  function mapWeatherIcon(apiIcon) {
-    const iconMapping = {
+  const getIcon = (apiIcon) => {
+    const icons = {
       "clear-sky-day": "CLEAR_DAY",
       "clear-sky-night": "CLEAR_NIGHT",
       "few-clouds-day": "PARTLY_CLOUDY_DAY",
@@ -69,11 +85,11 @@ export default function WeatherApp() {
       "mist-day": "FOG",
       "mist-night": "FOG",
     };
-    return iconMapping[apiIcon] || "CLOUDY";
-  }
+    return icons[apiIcon] || "CLOUDY";
+  };
 
   return (
-    <div className="container weather-app mt-5 p-4 rounded shadow-lg bg-light">
+    <div className="Weather mt-5 p-4 rounded shadow-lg bg-light">
       <header className="mb-4 border-bottom pb-3">
         <form onSubmit={handleSearch} className="row g-2">
           <div className="col-8">
@@ -97,10 +113,10 @@ export default function WeatherApp() {
         <>
           <div className="row align-items-center">
             <div className="col-md-6">
-              <h1 className="fw-bold">{city}</h1>
+              <h1>{city}</h1>
               <p>
-                <span>{new Date().toLocaleString()}</span>,
-                <span className="text-primary"> {weather.description}</span>
+                {new Date().toLocaleString()},{" "}
+                <span className="text-primary">{weather.description}</span>
                 <br />
                 Humidity: <strong>{weather.humidity}%</strong>, Wind:{" "}
                 <strong>
@@ -108,14 +124,14 @@ export default function WeatherApp() {
                 </strong>
               </p>
             </div>
-            <div className="col-md-6 text-center">
+            <div className="col-md-6 text-end current-weather-icon">
               <ReactAnimatedWeather
                 icon={weather.icon}
                 color="#1e1e1e"
                 size={64}
                 animate={true}
               />
-              <h2 className="fw-bold display-4">
+              <h2 className="fw-bold display-4 current-weather-temperature">
                 {weather.temperature}°
                 <span>{unit === "imperial" ? "F" : "C"}</span>
               </h2>
@@ -137,7 +153,7 @@ export default function WeatherApp() {
                   })}
                 </h5>
                 <ReactAnimatedWeather
-                  icon={mapWeatherIcon(day.condition.icon)}
+                  icon={getIcon(day.condition.icon)}
                   color="#1e1e1e"
                   size={50}
                   animate={true}
@@ -151,38 +167,7 @@ export default function WeatherApp() {
           </div>
         </>
       )}
-
-      <footer className="border-top pt-3 text-center">
-        <p>
-          Coded by{" "}
-          <a
-            href="https://github.com/liflatt"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Lindsey Flatt
-          </a>
-          , open-sourced
-          <a
-            href="https://github.com/liflatt/react-weather-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {" "}
-            on GitHub
-          </a>
-          , and
-          <a
-            href="https://react-weather-app-by-lindsey-flatt.netlify.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {" "}
-            hosted on Netlify
-          </a>
-          .
-        </p>
-      </footer>
+      <Footer />
     </div>
   );
 }
