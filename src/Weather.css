@@ -1,29 +1,47 @@
-.Weather body {
-  background: #9b8dcc;
-}
-
 .Weather {
   background: #dcd6f7;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
   margin: 45px auto;
   max-width: 600px;
   border-radius: 16px;
   box-shadow: 0px 30px 50px rgba(65, 50, 100, 0.08);
-  padding: 2rem;
+  padding: 30px;
+}
+
+.Weather h1,
+h2,
+h5 {
+  color: #444049;
 }
 
 .Weather h1 {
-  font-size: 2rem;
+  font-size: 48px;
+  font-weight: 700;
+}
+.Weather h2 {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 52px;
+  color: #383852;
 }
 
-.Weather h2 {
-  font-size: 1.5rem;
+.Weather h5 {
+  font-size: 18px;
 }
-.Weather .weather-info ul {
+.Weather li {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  color: #5c5d85;
+}
+
+.Weather ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: inline-block;
-  font-size: 1rem;
 }
 
 .Weather .weather-info strong {
@@ -32,5 +50,59 @@
 
 .Weather a {
   color: #b92cb5;
-  font-size: 1rem;
+  font-weight: bold;
+}
+
+.Weather .toggle-btn {
+  color: #b92cb5;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.Weather form {
+  line-height: 22x;
+}
+
+.Weather .form-control {
+  font-size: 16px;
+  background: rgba(179, 165, 204, 0.4);
+  font-weight: 400;
+  color: rgba(51, 49, 54, 0.8);
+  border: none;
+  padding: 10px;
+}
+
+.Weather .submit-btn {
+  background: rgb(144, 119, 184);
+  padding: 10px;
+  text-align: center;
+  border: none;
+  font-size: 16px;
+  color: white;
+}
+
+.Weather .temperature-unit {
+  position: relative;
+  font-size: 28px;
+  font-weight: 400;
+  top: -25px;
+}
+
+.Weather .Footer {
+  color: #5c5d85;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 100;
+  text-align: center;
+}
+
+.Weather .Footer a {
+  font-weight: 500;
+  color: #4c4d80;
+}
+
+.Weather .temp-min {
+  color: #5c5d85;
+  font-size: 16px;
+  font-weight: 100;
 }

@@ -1,8 +1,13 @@
 body {
-  background: #9b8dcc;
+  background: rgb(145, 133, 189);
 }
 
 .App {
   max-width: 800px;
   margin: 60px auto;
+}
+
+.App .Footer a {
+  color: rgb(96, 69, 119);
+  font-weight: 400;
 }

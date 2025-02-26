@@ -3,7 +3,7 @@ import React from "react";
 export default function Footer() {
   return (
     <div className="Footer">
-      <footer className="border-top pt-3 text-center">
+      <footer>
         <p>
           Coded by{" "}
           <a
@@ -13,24 +13,23 @@ export default function Footer() {
           >
             Lindsey Flatt
           </a>
-          , open-sourced{" "}
+          , open-sourced on{" "}
           <a
             href="https://github.com/liflatt/react-weather-app"
             target="_blank"
             rel="noopener noreferrer"
           >
             {" "}
-            on GitHub
+            GitHub
           </a>
-          , and {""}
+          , and hosted on {""}
           <a
             href="https://react-weather-app-by-lindsey-flatt.netlify.app/"
             target="_blank"
             rel="noopener noreferrer"
           >
-            hosted on Netlify
+            Netlify
           </a>
-          .
         </p>
       </footer>
     </div>

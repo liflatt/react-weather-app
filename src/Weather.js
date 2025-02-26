@@ -91,33 +91,36 @@ export default function Weather({
 
   return (
     <div className="Weather">
-      <form onSubmit={handleSearch} className="row">
-        <div className="col-9">
-          <input
-            type="search"
-            name="cityInput"
-            className="form-control"
-            placeholder="Enter a city.."
-            required
-          />
-        </div>
-        <div className="col-3 p-0">
-          <button type="submit" className="btn btn-primary w-100">
-            Search
-          </button>
-        </div>
-      </form>
+      <div className="container">
+        <form onSubmit={handleSearch} className="row mb-4">
+          <div className="col-9">
+            <input
+              type="search"
+              name="cityInput"
+              className="form-control"
+              placeholder="Enter a city.."
+              required
+            />
+          </div>
+          <div className="col-3 p-0">
+            <button type="submit" className="btn w-100 submit-btn">
+              Search
+            </button>
+          </div>
+        </form>
+      </div>
 
       {ready && (
         <>
           <div className="weather-info container">
-            <div className="row mt-4">
-              <div className="col-6 current-conditions">
-                <h1 className="fs-1 text-nowrap">{city}</h1>
+            <div className="row current-weather mb-4">
+              <div className="col-6 conditions">
+                <h1>{city}</h1>
                 <ul>
                   <li>
-                    Last Updated:{" "}
+                    Last Updated:
                     <strong>
+                      {" "}
                       <FormattedDate date={weather.date} />
                     </strong>
                   </li>
@@ -125,7 +128,10 @@ export default function Weather({
                     Condition: <strong>{weather.description}</strong>
                   </li>
                   <li>
-                    Humidity: <strong>{weather.humidity}%</strong>, Wind:{" "}
+                    Humidity:{""} <strong>{weather.humidity}%</strong>
+                  </li>
+                  <li>
+                    Wind:{" "}
                     <strong>
                       {weather.wind} {unit === "imperial" ? "mph" : "km/h"}
                     </strong>
@@ -133,30 +139,35 @@ export default function Weather({
                 </ul>
               </div>
 
-              <div className="col-6">
-                <div className="d-flex justify-content-end align-items-start temperature-container">
+              <div className="col-6 d-flex justify-content-end">
+                <div className="text-center">
                   <ReactAnimatedWeather
                     icon={weather.icon}
-                    color="#1e1e1e"
-                    size={52}
+                    color="#383852"
+                    size={64}
                     animate={true}
                   />
-                  <div className="ms-2 current-temperature-container">
-                    <h2 className="temperature">
-                      {weather.temperature}°
-                      <span>{unit === "imperial" ? "F" : "C"}</span>
-                    </h2>
-                    <button
-                      className="btn btn-link text-decoration-none fs-6 p-0 m-0"
-                      onClick={toggleUnit}
-                    >
-                      Switch to {unit === "imperial" ? "°C" : "°F"}
-                    </button>
-                  </div>
+                </div>
+                <div className="temperature">
+                  <h2 className="temperature-value m-0 p-0">
+                    {weather.temperature}
+                    <span className="temperature-unit">
+                      °{unit === "imperial" ? "F" : "C"}
+                    </span>{" "}
+                  </h2>
+
+                  <button
+                    className="btn toggle-btn text-decoration-none m-0 p-0"
+                    onClick={toggleUnit}
+                  >
+                    Switch to {""}
+                    {unit === "imperial" ? "°C" : "°F"}
+                  </button>
                 </div>
               </div>
             </div>
-            <div className="row text-center justify-content-evenly mt-5">
+
+            <div className="row text-center justify-content-evenly forecast text-nowrap mt-3 mb-2 p-2">
               {forecast.map((day, index) => (
                 <div key={index} className="col">
                   <h5>
@@ -166,21 +177,26 @@ export default function Weather({
                   </h5>
                   <ReactAnimatedWeather
                     icon={getIcon(day.condition.icon)}
-                    color="#1e1e1e"
-                    size={50}
+                    color="#444049"
+                    size={44}
                     animate={true}
                   />
                   <p>
-                    <strong>{Math.round(day.temperature.maximum)}°</strong> /{" "}
-                    {Math.round(day.temperature.minimum)}°
+                    <span className="temp-max">
+                      <strong>{Math.round(day.temperature.maximum)}°</strong>
+                    </span>{" "}
+                    /{" "}
+                    <span className="temp-min">
+                      {Math.round(day.temperature.minimum)}°
+                    </span>
                   </p>
                 </div>
               ))}
             </div>
+            <Footer />
           </div>
         </>
       )}
-      <Footer />
     </div>
   );
 }
