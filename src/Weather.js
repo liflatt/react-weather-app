@@ -114,8 +114,10 @@ export default function Weather({
         <>
           <div className="weather-info container">
             <div className="row current-weather mb-4">
-              <div className="col-6 conditions">
+              <div className="row">
                 <h1>{city}</h1>
+              </div>
+              <div className="col-6 conditions">
                 <ul>
                   <li>
                     Last Updated:
@@ -139,7 +141,7 @@ export default function Weather({
                 </ul>
               </div>
 
-              <div className="col-6 d-flex justify-content-end">
+              <div className="col-6 d-flex justify-content-end text-center">
                 <div className="text-center">
                   <ReactAnimatedWeather
                     icon={weather.icon}
@@ -167,7 +169,7 @@ export default function Weather({
               </div>
             </div>
 
-            <div className="row text-center justify-content-evenly forecast text-nowrap mt-3 mb-2 p-2">
+            <div className="row text-center justify-content-between forecast mt-3 mb-2">
               {forecast.map((day, index) => (
                 <div key={index} className="col">
                   <h5>
