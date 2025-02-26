@@ -90,7 +90,7 @@ h5 {
 
 .Weather .Footer {
   color: #5c5d85;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 22px;
   font-weight: 100;
   text-align: center;
@@ -105,4 +105,11 @@ h5 {
   color: #5c5d85;
   font-size: 16px;
   font-weight: 100;
+}
+
+.Weather .temp-max {
+  font-size: 16px;
+}
+.Weather .forecast {
+  line-height: 28px;
 }
