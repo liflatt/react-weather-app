@@ -1,13 +1,8 @@
-body {
-  background: rgb(145, 133, 189);
-}
-
 .App {
   max-width: 800px;
   margin: 60px auto;
 }
 
-.App .Footer a {
-  color: rgb(96, 69, 119);
-  font-weight: 400;
+body {
+  background: linear-gradient(to right, #dcd6f7, #b6b6f8, #c5e4c3);
 }

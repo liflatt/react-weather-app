@@ -28,7 +28,7 @@ const ICONS = {
 };
 
 function getIcon(apiIcon) {
-  return ICONS[apiIcon];
+  return ICONS[apiIcon] || "CLEAR_DAY";
 }
 
 export default function Weather({
@@ -83,7 +83,8 @@ export default function Weather({
     fetchWeather(inputCity, unit);
   };
 
-  const toggleUnit = () => {
+  const toggleUnit = (event) => {
+    event.preventDefault();
     const newUnit = unit === "imperial" ? "metric" : "imperial";
     setUnit(newUnit);
     fetchWeather(city, newUnit);
@@ -91,112 +92,95 @@ export default function Weather({
 
   return (
     <div className="Weather">
-      <div className="container">
-        <form onSubmit={handleSearch} className="row mb-4">
-          <div className="col-9">
-            <input
-              type="search"
-              name="cityInput"
-              className="form-control"
-              placeholder="Enter a city.."
-              required
-            />
-          </div>
-          <div className="col-3 p-0">
-            <button type="submit" className="btn w-100 submit-btn">
-              Search
-            </button>
-          </div>
-        </form>
-      </div>
+      <form onSubmit={handleSearch} className="row g-3 mb-4">
+        <div className="col-8 col-md-9">
+          <input
+            type="search"
+            name="cityInput"
+            className="form-control"
+            placeholder="Enter a city..."
+            required
+          />
+        </div>
+        <div className="col-4 col-md-3">
+          <button type="submit" className="btn w-100 submit-btn">
+            Search
+          </button>
+        </div>
+      </form>
 
       {ready && (
         <>
-          <div className="weather-info container">
-            <div className="row current-weather mb-4">
-              <div className="row">
-                <h1>{city}</h1>
-              </div>
-              <div className="col-6 conditions">
-                <ul>
-                  <li>
-                    Last Updated:
-                    <strong>
-                      {" "}
-                      <FormattedDate date={weather.date} />
-                    </strong>
-                  </li>
-                  <li>
-                    Condition: <strong>{weather.description}</strong>
-                  </li>
-                  <li>
-                    Humidity:{""} <strong>{weather.humidity}%</strong>
-                  </li>
-                  <li>
-                    Wind:{" "}
-                    <strong>
-                      {weather.wind} {unit === "imperial" ? "mph" : "km/h"}
-                    </strong>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="col-6 d-flex justify-content-end text-center">
-                <div className="text-center">
-                  <ReactAnimatedWeather
-                    icon={weather.icon}
-                    color="#383852"
-                    size={64}
-                    animate={true}
-                  />
-                </div>
-                <div className="temperature">
-                  <h2 className="temperature-value m-0 p-0">
-                    {weather.temperature}
-                    <span className="temperature-unit">
-                      °{unit === "imperial" ? "F" : "C"}
-                    </span>{" "}
-                  </h2>
-
-                  <button
-                    className="btn toggle-btn text-decoration-none m-0 p-0"
-                    onClick={toggleUnit}
-                  >
-                    Switch to {""}
-                    {unit === "imperial" ? "°C" : "°F"}
-                  </button>
-                </div>
-              </div>
+          <div className="row align-items-center">
+            <div className="col-md-6 text-center text-md-start">
+              <h1 className="display-4">{city}</h1>
+              <ul className="list-unstyled">
+                <li>
+                  <strong>Last Updated:</strong>{" "}
+                  <FormattedDate date={weather.date} />
+                </li>
+                <li>
+                  <strong>Condition:</strong> {weather.description}
+                </li>
+                <li>
+                  <strong>Humidity:</strong> {weather.humidity}%
+                </li>
+                <li>
+                  <strong>Wind:</strong> {weather.wind}{" "}
+                  {unit === "imperial" ? "mph" : "km/h"}
+                </li>
+              </ul>
             </div>
+            <div className="col-md-6 mt-3 mb-3 d-flex flex-column align-items-center">
+              <ReactAnimatedWeather
+                icon={weather.icon}
+                color="#383852"
+                size={80}
+                animate={true}
+              />
+              <h2>
+                {weather.temperature}
+                <span className="unit">°{unit === "imperial" ? "F" : "C"}</span>
+              </h2>
 
-            <div className="row text-center justify-content-between forecast mt-3 mb-2">
-              {forecast.map((day, index) => (
-                <div key={index} className="col">
-                  <h5>
-                    {new Date(day.time * 1000).toLocaleDateString("en-US", {
-                      weekday: "short",
-                    })}
-                  </h5>
-                  <ReactAnimatedWeather
-                    icon={getIcon(day.condition.icon)}
-                    color="#444049"
-                    size={44}
-                    animate={true}
-                  />
-                  <p>
-                    <span className="temp-max">
-                      <strong>{Math.round(day.temperature.maximum)}°</strong>
-                    </span>{" "}
-                    /{" "}
-                    <span className="temp-min">
-                      {Math.round(day.temperature.minimum)}°
-                    </span>
-                  </p>
-                </div>
-              ))}
+              <a
+                href="/"
+                className="btn toggle-btn m-0 p-0"
+                onClick={toggleUnit}
+                rel="noopener noreferrer"
+              >
+                Switch to {unit === "imperial" ? "°C" : "°F"}
+              </a>
             </div>
-            <Footer />
           </div>
+
+          <div className="row p-2 text-center align-items-center justify-content-between forecast mt-3">
+            {forecast.map((day, index) => (
+              <div key={index} className="col">
+                <h5>
+                  {new Date(day.time * 1000).toLocaleDateString("en-US", {
+                    weekday: "short",
+                  })}
+                </h5>
+                <ReactAnimatedWeather
+                  icon={getIcon(day.condition.icon)}
+                  color="#444049"
+                  size={44}
+                  animate={true}
+                />
+                <p>
+                  <span className="temp-max">
+                    <strong>{Math.round(day.temperature.maximum)}°</strong>
+                  </span>{" "}
+                  /{" "}
+                  <span className="temp-min">
+                    {Math.round(day.temperature.minimum)}°
+                  </span>
+                </p>
+              </div>
+            ))}
+          </div>
+          <Footer />
         </>
       )}
     </div>

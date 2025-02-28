@@ -1,7 +1,6 @@
 .Weather {
   background: #dcd6f7;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-
   margin: 45px auto;
   max-width: 600px;
   border-radius: 16px;
@@ -22,16 +21,16 @@ h5 {
 .Weather h2 {
   font-size: 52px;
   font-weight: 700;
-  line-height: 28px;
-  color: #383852;
+
+  color: #444049;
 }
 
 .Weather h5 {
-  font-size: 18px;
+  font-size: 16px;
 }
 .Weather li {
   font-size: 16px;
-  line-height: 22px;
+
   font-weight: 400;
   margin: 0;
   padding: 0;
@@ -44,7 +43,7 @@ h5 {
   padding: 0;
 }
 
-.Weather .weather-info strong {
+.Weather strong {
   color: #b92cb5;
 }
 
@@ -57,10 +56,6 @@ h5 {
   color: #b92cb5;
   font-size: 16px;
   font-weight: 700;
-}
-
-.Weather form {
-  line-height: 22x;
 }
 
 .Weather .form-control {
@@ -81,7 +76,7 @@ h5 {
   color: white;
 }
 
-.Weather .temperature-unit {
+.Weather .unit {
   position: relative;
   font-size: 20px;
   font-weight: 500;
@@ -90,7 +85,7 @@ h5 {
 
 .Weather .Footer {
   color: #5c5d85;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 22px;
   font-weight: 100;
   text-align: center;
@@ -103,13 +98,10 @@ h5 {
 
 .Weather .temp-min {
   color: #5c5d85;
-  font-size: 16px;
-  font-weight: 100;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .Weather .temp-max {
-  font-size: 16px;
-}
-.Weather .forecast {
-  line-height: 28px;
+  font-size: 14px;
 }
