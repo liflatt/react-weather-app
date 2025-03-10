@@ -111,7 +111,7 @@ export default function Weather({
 
       {ready && (
         <>
-          <div className="row align-items-center">
+          <div className="row align-items-center p-2">
             <div className="col-md-6 text-center text-md-start">
               <h1 className="display-4">{city}</h1>
               <ul className="list-unstyled">
@@ -131,21 +131,21 @@ export default function Weather({
                 </li>
               </ul>
             </div>
-            <div className="col-md-6 mt-3 mb-3 d-flex flex-column align-items-center">
+            <div className="col-md-6 d-flex flex-column align-items-center mt-4 mb-2 p-2">
               <ReactAnimatedWeather
                 icon={weather.icon}
-                color="#383852"
-                size={80}
+                color="#27252c"
+                size={72}
                 animate={true}
               />
-              <h2>
+              <h2 class="mb-0 mt-1">
                 {weather.temperature}
                 <span className="unit">°{unit === "imperial" ? "F" : "C"}</span>
               </h2>
 
               <a
                 href="/"
-                className="btn toggle-btn m-0 p-0"
+                className="toggle-btn text-center text-decoration-none"
                 onClick={toggleUnit}
                 rel="noopener noreferrer"
               >
@@ -154,9 +154,9 @@ export default function Weather({
             </div>
           </div>
 
-          <div className="row p-2 text-center align-items-center justify-content-between forecast mt-3">
+          <div className="row text-center align-items-center justify-content-between forecast mt-2 mb-2">
             {forecast.map((day, index) => (
-              <div key={index} className="col">
+              <div key={index} className="col align-items-center">
                 <h5>
                   {new Date(day.time * 1000).toLocaleDateString("en-US", {
                     weekday: "short",
@@ -164,11 +164,11 @@ export default function Weather({
                 </h5>
                 <ReactAnimatedWeather
                   icon={getIcon(day.condition.icon)}
-                  color="#444049"
+                  color="#27252c"
                   size={44}
                   animate={true}
                 />
-                <p>
+                <p class="forecast-temps">
                   <span className="temp-max">
                     <strong>{Math.round(day.temperature.maximum)}°</strong>
                   </span>{" "}
