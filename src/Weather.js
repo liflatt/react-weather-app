@@ -92,7 +92,7 @@ export default function Weather({
 
   return (
     <div className="Weather">
-      <form onSubmit={handleSearch} className="row g-3 mb-4">
+      <form onSubmit={handleSearch} className="row g-3 p-2">
         <div className="col-8 col-md-9">
           <input
             type="search"
@@ -111,7 +111,7 @@ export default function Weather({
 
       {ready && (
         <>
-          <div className="row align-items-center p-2">
+          <div className="row align-items-center">
             <div className="col-md-6 text-center text-md-start">
               <h1 className="display-4">{city}</h1>
               <ul className="list-unstyled">
@@ -131,7 +131,7 @@ export default function Weather({
                 </li>
               </ul>
             </div>
-            <div className="col-md-6 d-flex flex-column align-items-center mt-4 mb-2 p-2">
+            <div className="col-md-6 d-flex flex-column align-items-center mb-2 mt-2 p-2">
               <ReactAnimatedWeather
                 icon={weather.icon}
                 color="#27252c"
@@ -154,7 +154,7 @@ export default function Weather({
             </div>
           </div>
 
-          <div className="row text-center align-items-center justify-content-between forecast mt-2 mb-2">
+          <div className="row text-center align-items-center justify-content-between forecast mt-3 mb-3">
             {forecast.map((day, index) => (
               <div key={index} className="col align-items-center">
                 <h5>

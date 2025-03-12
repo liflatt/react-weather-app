@@ -1,9 +1,8 @@
 .Weather {
   background: rgb(218, 212, 247);
   font-family: "Poppins", sans-serif;
-  margin: 45px auto;
-  max-width: 600px;
   border-radius: 16px;
+  max-width: 100;
   border: 2px solid rgba(134, 134, 206, 0.6);
   box-shadow: 0px 30px 50px rgba(115, 115, 180, 0.6);
   padding: 30px;
